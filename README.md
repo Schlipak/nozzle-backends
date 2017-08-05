@@ -8,7 +8,7 @@ For installation instructions, check out REQUIREMENTS.md
 
 If you have made a cool script that you think brings useful functionalities that Nozzle would benefit from, or found a bug or improved an existing script, please follow these steps:
 
-- [Fork the repository](https://github.com/Schlipak/nozzle-backends)
+- [Fork the repository](https://github.com/Schlipak/nozzle-backends/fork)
 - Create a feature branch (`get checkout -b my-new-feature`)
 - Commit and push your changes
 - Open a new pull request
