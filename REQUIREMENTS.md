@@ -29,8 +29,8 @@ pip install py_expression_eval
 
 ## Web
 
-Requires the `request` and `unescape` Node modules, install in the script directory using:
+Requires the `request` and `html-entities` Node modules, install in the script directory using:
 
 ```sh
-npm i request unescape
+npm i request html-entities
 ```

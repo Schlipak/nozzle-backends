@@ -4,8 +4,8 @@
  * Opens the input in the default browser if it is an URL.
  * Resolves the page title, or warns if no DNS domain can be resolved
  *
- * Requires request and unescape, install in the script directory using
- *  `npm i request unescape`
+ * Requires request and html-entities, install in the script directory using
+ *  `npm i request html-entities`
  *
  * Config usage:
  * => exec=node
@@ -17,7 +17,9 @@
 
 const readline = require('readline');
 const request = require('request');
-const decode = require('unescape');
+
+const Entities = require('html-entities').AllHtmlEntities;
+const entities = new Entities();
 
 const TITLE_REGEX = /<title>(.*?)<\/title>/m;
 
@@ -42,7 +44,7 @@ const getTitleAtUrl = debounce(function getTitleAtUrl(url, resolve, reject) {
     if (!error && response.statusCode === 200) {
       const md = TITLE_REGEX.exec(body);
       if (md) {
-        resolve(decode(md[1]), 'all');
+        resolve(entities.decode(md[1]));
       }
       resolve();
     } else {
