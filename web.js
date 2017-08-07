@@ -38,19 +38,18 @@ const debounce = function debounce(func, wait, immediate) {
 };
 
 const getTitleAtUrl = debounce(function getTitleAtUrl(url, resolve, reject) {
-  console.error('POKPOKDPOZKDPZKPDOK');
   request(url, (error, response, body) => {
     if (!error && response.statusCode === 200) {
       const md = TITLE_REGEX.exec(body);
       if (md) {
-        resolve(decode(md[1]), 'extras');
+        resolve(decode(md[1]), 'all');
       }
       resolve();
     } else {
       reject(error);
     }
   });
-}, 250);
+}, 500);
 
 const WebBackend = {
   rl: null,
@@ -79,7 +78,7 @@ const WebBackend = {
 
   makeOutput: function(uri) {
     if (!uri) {
-      return this.returnJSON();
+      return this.returnJSON(null, null, false);
     }
     if (!/^(?:https?|ftp):\/\/[^\s]+$/.test(uri)) {
       uri = `http://${uri}`;
@@ -90,7 +89,7 @@ const WebBackend = {
     promise
       .then(name => {
         if (promise === this.promises[this.promises.length - 1]) {
-          const updatedOutput = this.returnJSON(uri, name);
+          const updatedOutput = this.returnJSON(uri, name, false);
           process.stderr.write('\n');
           process.stdout.write(`${updatedOutput}\n`);
           process.stderr.write('> ');
@@ -100,7 +99,8 @@ const WebBackend = {
       .catch(err => {
         const updatedOutput = this.returnJSON(
           uri,
-          'website (Domain not found)'
+          'website (Domain not found)',
+          false
         );
         console.error(err);
         process.stderr.write('\n');
@@ -109,14 +109,15 @@ const WebBackend = {
         this.promises = this.promises.filter(p => p !== promise);
       });
 
-    return this.returnJSON(uri);
+    return this.returnJSON(uri, null, true);
   },
 
-  returnJSON: function(uri, pageName) {
+  returnJSON: function(uri, pageName, loading = false) {
     return JSON.stringify({
       backend: 'Web',
       version: '1.0.0',
       priority: 9,
+      loading: loading,
       results: uri ? this.serializeUri(uri, pageName) : [],
     });
   },

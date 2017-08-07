@@ -21,12 +21,13 @@ class Launches
     while input = $stdin.gets
       input = input.chomp if input
       results = if input == 'launches'
+        notify_loading
         get_launch_data
       else
         []
       end
       puts serialize(results)
-      STDOUT.flush
+      $stdout.flush
       $stderr.print '> '
     end
   end
@@ -67,6 +68,11 @@ class Launches
     end
   end
 
+  def notify_loading
+    puts serialize([], true)
+    $stdout.flush
+  end
+
   def get_launch_data
     launches = []
     open ENDPOINT do |fd|
@@ -83,11 +89,12 @@ class Launches
     return launches
   end
 
-  def serialize(results)
+  def serialize(results, loading = false)
     {
       :backend => 'launches',
       :version => '1.0.0',
       :priority => 9,
+      :loading => loading,
       :results => results
     }.to_json
   end
