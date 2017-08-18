@@ -64,7 +64,7 @@ class ApplicationEntry
   private
 
   def clean_exec(exec)
-    exec.gsub /%[fFuUdDnNkv]/, ''
+    exec.gsub(/%[fFuUdDnNkv]/, '').strip
   end
 
   def highlight_fuzzy(name)
