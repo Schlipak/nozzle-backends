@@ -53,9 +53,9 @@ class ApplicationEntry
 
   def data
     clone = @data.clone
-    clone[:description] = clone.delete(:comment)
+    clone[:description] = clone.delete :comment
     clone[:description] = clone.delete(:comment_i18n) if clone[:comment_i18n]
-    clone[:description] = "<i>#{clone[:description]}</i>"
+    clone[:description] = clone.delete(:generic_name) unless clone[:description]
     clone[:name] = highlight_fuzzy clone[:name]
     clone[:exec] = clean_exec clone[:exec]
     clone
